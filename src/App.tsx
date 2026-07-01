@@ -184,7 +184,7 @@ export default function App() {
       return n + (s[(v - 20) % 10] || s[v] || s[0]);
     };
     dateOfMarry = getOrdinal(dayNum);
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     monthOfMarry = months[dObj.getMonth()];
     yearOfMarry = dObj.getFullYear().toString();
   } else if (config.displayDate) {
@@ -192,7 +192,7 @@ export default function App() {
     const parts = cleaned.split(/\s+/);
     if (parts.length >= 3) {
       dateOfMarry = parts[0];
-      monthOfMarry = parts[1];
+      monthOfMarry = parts[1].substring(0, 3);
       yearOfMarry = parts[2];
     }
   }
@@ -609,12 +609,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={85}
-                  height={85}
+                  width={75}
+                  height={75}
                   onReveal={() => setIsDateRevealed(true)}
                   content={
-                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
-                      <span className="font-display text-sm sm:text-base font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                      isDateRevealed 
+                        ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
+                        : "bg-transparent border-transparent"
+                    }`}>
+                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
                         {dateOfMarry}
                       </span>
                     </div>
@@ -630,12 +634,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={85}
-                  height={85}
+                  width={75}
+                  height={75}
                   onReveal={() => setIsMonthRevealed(true)}
                   content={
-                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
-                      <span className="font-display text-xs sm:text-sm font-black text-pink-600 uppercase tracking-widest leading-none drop-shadow-sm truncate max-w-[68px]">
+                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                      isMonthRevealed 
+                        ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
+                        : "bg-transparent border-transparent"
+                    }`}>
+                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 uppercase tracking-widest leading-none drop-shadow-sm truncate max-w-[58px]">
                         {monthOfMarry}
                       </span>
                     </div>
@@ -651,12 +659,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={85}
-                  height={85}
+                  width={75}
+                  height={75}
                   onReveal={() => setIsYearRevealed(true)}
                   content={
-                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
-                      <span className="font-display text-sm sm:text-base font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                      isYearRevealed 
+                        ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
+                        : "bg-transparent border-transparent"
+                    }`}>
+                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
                         {yearOfMarry}
                       </span>
                     </div>
