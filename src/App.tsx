@@ -163,8 +163,39 @@ export default function App() {
   // Opening flow states
   const [isOpened, setIsOpened] = useState(false);
   const [isDateRevealed, setIsDateRevealed] = useState(false);
+  const [isMonthRevealed, setIsMonthRevealed] = useState(false);
+  const [isYearRevealed, setIsYearRevealed] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
+
+  const allHeartsScratched = isDateRevealed && isMonthRevealed && isYearRevealed;
   const musicPlayingRef = useRef(musicPlaying);
+  
+  // Parse wedding date parts safely
+  const dObj = new Date(config.weddingDate);
+  let dateOfMarry = "12th";
+  let monthOfMarry = "December";
+  let yearOfMarry = "2026";
+
+  if (!isNaN(dObj.getTime())) {
+    const dayNum = dObj.getDate();
+    const getOrdinal = (n: number) => {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+    dateOfMarry = getOrdinal(dayNum);
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    monthOfMarry = months[dObj.getMonth()];
+    yearOfMarry = dObj.getFullYear().toString();
+  } else if (config.displayDate) {
+    const cleaned = config.displayDate.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*/i, '');
+    const parts = cleaned.split(/\s+/);
+    if (parts.length >= 3) {
+      dateOfMarry = parts[0];
+      monthOfMarry = parts[1];
+      yearOfMarry = parts[2];
+    }
+  }
   
   useEffect(() => {
     musicPlayingRef.current = musicPlaying;
@@ -515,7 +546,7 @@ export default function App() {
           </div>
 
           {/* Falling Flowers overlay */}
-          <FallingFlowers active={isDateRevealed} />
+          <FallingFlowers active={allHeartsScratched} />
 
           {/* Couple Names Display (Bottom Aligned) */}
           <div className="relative z-10 w-full mb-4 flex flex-col items-center">
@@ -558,25 +589,81 @@ export default function App() {
           transition={{ duration: 0.6 }}
           className="py-16 px-4 md:px-8 max-w-4xl mx-auto text-center relative z-10 flex flex-col items-center"
         >
-          <h2 className="font-display text-2xl md:text-3xl text-red-600 tracking-wide mb-6 uppercase font-bold drop-shadow-md">
-            Reveal the Date
-          </h2>
-          <div className="p-4 bg-white/5 rounded-2xl border border-gold-500/30 backdrop-blur-sm shadow-xl inline-block">
-            <ScratchReveal
-              width={320}
-              height={120}
-              onReveal={() => setIsDateRevealed(true)}
-              content={
-                <div className="w-full h-full flex flex-col items-center justify-center bg-pink-100 text-pink-800 rounded-lg border-2 border-pink-400 shadow-inner px-4 text-center drop-shadow-sm">
-                  <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-pink-600 font-bold mb-1">
-                    Save The Date
-                  </span>
-                  <span className="font-accent text-3xl md:text-4xl">
-                    {config.displayDate.replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday),\s*/i, '')}
-                  </span>
-                </div>
-              }
-            />
+          {/* Beautiful "SAVE THE DATE ❤️" Tagline */}
+          <div className="mb-8">
+            <span className="font-display text-2xl md:text-4xl text-red-600 tracking-[0.2em] font-extrabold drop-shadow-md flex items-center justify-center gap-2">
+              SAVE THE DATE ❤️
+            </span>
+            <p className="text-xs font-sans text-gold-700/80 uppercase tracking-[0.3em] font-semibold mt-1.5">
+              Scratch the hearts to reveal
+            </p>
+            <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-3" />
+          </div>
+
+          {/* 3 Red Hearts container */}
+          <div className="flex flex-row flex-nowrap justify-center items-center gap-4 sm:gap-6 md:gap-8 px-2 py-4 w-full overflow-x-auto no-scrollbar">
+            {/* Heart 1: Date */}
+            <div className="flex flex-col items-center shrink-0">
+              <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.2em] text-gold-300 font-extrabold mb-2.5 drop-shadow-sm">
+                DATE
+              </span>
+              <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
+                <ScratchReveal
+                  width={85}
+                  height={85}
+                  onReveal={() => setIsDateRevealed(true)}
+                  content={
+                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
+                      <span className="font-display text-sm sm:text-base font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                        {dateOfMarry}
+                      </span>
+                    </div>
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Heart 2: Month */}
+            <div className="flex flex-col items-center shrink-0">
+              <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.2em] text-gold-300 font-extrabold mb-2.5 drop-shadow-sm">
+                MONTH
+              </span>
+              <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
+                <ScratchReveal
+                  width={85}
+                  height={85}
+                  onReveal={() => setIsMonthRevealed(true)}
+                  content={
+                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
+                      <span className="font-display text-xs sm:text-sm font-black text-pink-600 uppercase tracking-widest leading-none drop-shadow-sm truncate max-w-[68px]">
+                        {monthOfMarry}
+                      </span>
+                    </div>
+                  }
+                />
+              </div>
+            </div>
+
+            {/* Heart 3: Year */}
+            <div className="flex flex-col items-center shrink-0">
+              <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.2em] text-gold-300 font-extrabold mb-2.5 drop-shadow-sm">
+                YEAR
+              </span>
+              <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
+                <ScratchReveal
+                  width={85}
+                  height={85}
+                  onReveal={() => setIsYearRevealed(true)}
+                  content={
+                    <div className="w-[72px] h-[72px] rounded-full bg-rose-50 border border-pink-200/50 shadow-inner flex items-center justify-center p-1 overflow-hidden">
+                      <span className="font-display text-sm sm:text-base font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                        {yearOfMarry}
+                      </span>
+                    </div>
+                  }
+                />
+              </div>
+            </div>
           </div>
         </motion.section>
 
@@ -1012,7 +1099,7 @@ export default function App() {
           </div>
 
           {/* Vanish transition photo gallery */}
-          <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-gold-500/20 group bg-gray-100 flex items-center justify-center">
+          <div className="relative w-full h-[320px] sm:h-[420px] md:h-[520px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-gold-500/20 group bg-neutral-950 flex items-center justify-center">
              {config.galleryImages.length > 0 && (
                 <AnimatePresence mode="wait">
                    <motion.div
@@ -1021,10 +1108,10 @@ export default function App() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.8, ease: "easeInOut" }}
-                      className="relative w-full cursor-pointer flex flex-col items-center justify-center"
+                      className="relative w-full h-full cursor-pointer flex flex-col items-center justify-center"
                       onClick={() => setActivePhoto(config.galleryImages[currentGalleryIndex].url)}
                    >
-                       <FirestoreImage src={config.galleryImages[currentGalleryIndex].url} alt={config.galleryImages[currentGalleryIndex].caption} className="w-full h-auto max-h-[80vh] object-contain" />
+                       <FirestoreImage src={config.galleryImages[currentGalleryIndex].url} alt={config.galleryImages[currentGalleryIndex].caption} className="w-full h-full object-cover" />
                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
                        <div className="absolute bottom-6 left-6 z-10 pointer-events-none">
                            <span className="font-display text-white text-xl md:text-2xl tracking-wider drop-shadow-md font-bold">

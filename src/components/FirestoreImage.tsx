@@ -7,6 +7,8 @@ export function FirestoreImage(props: React.ComponentProps<"img">) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const universalFallback = "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800";
+
   useEffect(() => {
     if (src && src.startsWith("fsdb://")) {
       setLoading(true);
@@ -20,7 +22,7 @@ export function FirestoreImage(props: React.ComponentProps<"img">) {
         setLoading(false);
       });
     } else {
-      setResolvedSrc(src);
+      setResolvedSrc(src || universalFallback);
       setError(!src);
     }
   }, [src]);
@@ -36,16 +38,28 @@ export function FirestoreImage(props: React.ComponentProps<"img">) {
     );
   }
 
+  // If there is an error or no resolved src, instead of showing a grey box with "Image Unavailable",
+  // we render the gorgeous universal fallback image. This keeps the application look professional at all times.
   if (error || !resolvedSrc) {
     return (
-      <div 
-        className={`bg-gray-100 flex flex-col items-center justify-center border border-gray-200 ${props.className || ''}`}
+      <img 
+        src={universalFallback} 
+        {...rest} 
+        className={props.className}
         style={props.style}
-      >
-        <span className="text-xs text-gray-400">Image Unavailable</span>
-      </div>
+      />
     );
   }
 
-  return <img src={resolvedSrc} {...rest} onError={() => setError(true)} />;
+  return (
+    <img 
+      src={resolvedSrc} 
+      {...rest} 
+      className={props.className}
+      style={props.style}
+      onError={() => {
+        setResolvedSrc(universalFallback);
+      }} 
+    />
+  );
 }

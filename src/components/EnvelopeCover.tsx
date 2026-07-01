@@ -33,6 +33,7 @@ export const EnvelopeCover: React.FC<EnvelopeCoverProps> = ({
       {/* Top Triangle */}
       <motion.div 
         animate={isOpening ? { y: "-100vh" } : { y: 0 }}
+        exit={{ y: "-100vh" }}
         transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
         className="absolute top-0 left-0 w-full h-1/2 flex items-start justify-center overflow-hidden"
       >
@@ -41,10 +42,10 @@ export const EnvelopeCover: React.FC<EnvelopeCoverProps> = ({
         </svg>
         {isOpening && (
           <motion.div
-            initial={{ y: "-100%", opacity: 0.5 }}
-            animate={{ y: "200%", opacity: 0 }}
-            transition={{ duration: 1.5, ease: "linear" }}
-            className="absolute inset-0 w-full h-[50vh] bg-gradient-to-b from-transparent via-white to-transparent opacity-50 z-20"
+            initial={{ x: "-100%", opacity: 0 }}
+            animate={{ x: ["-100%", "50%", "200%"], opacity: [0, 0.9, 0] }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/80 to-transparent z-20 -skew-x-20 pointer-events-none"
           />
         )}
         <div className="relative z-10 flex flex-col items-center justify-start pt-12 md:pt-16">
@@ -62,6 +63,7 @@ export const EnvelopeCover: React.FC<EnvelopeCoverProps> = ({
       {/* Bottom Triangle */}
       <motion.div 
         animate={isOpening ? { y: "100vh" } : { y: 0 }}
+        exit={{ y: "100vh" }}
         transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1], delay: 0.1 }}
         className="absolute bottom-0 left-0 w-full h-1/2 flex items-end justify-center overflow-hidden"
       >
@@ -70,10 +72,10 @@ export const EnvelopeCover: React.FC<EnvelopeCoverProps> = ({
         </svg>
         {isOpening && (
           <motion.div
-            initial={{ y: "100%", opacity: 0.5 }}
-            animate={{ y: "-200%", opacity: 0 }}
-            transition={{ duration: 1.5, ease: "linear" }}
-            className="absolute inset-0 w-full h-[50vh] bg-gradient-to-t from-transparent via-white to-transparent opacity-50 z-20"
+            initial={{ x: "-100%", opacity: 0 }}
+            animate={{ x: ["-100%", "50%", "200%"], opacity: [0, 0.9, 0] }}
+            transition={{ duration: 1.5, ease: "easeInOut", delay: 0.1 }}
+            className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/80 to-transparent z-20 -skew-x-20 pointer-events-none"
           />
         )}
         <div className="relative z-10 flex flex-col items-center justify-end pb-16 md:pb-20">

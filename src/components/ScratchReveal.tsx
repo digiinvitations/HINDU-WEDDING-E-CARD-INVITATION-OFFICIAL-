@@ -10,6 +10,7 @@ interface ScratchRevealProps {
 export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: ScratchRevealProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isRevealed, setIsRevealed] = useState(false);
+  const [hasScratchStarted, setHasScratchStarted] = useState(false);
   const isDrawing = useRef(false);
   const lastPoint = useRef<{ x: number, y: number } | null>(null);
 
@@ -19,84 +20,68 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Fill with a decorative gift box pattern
-    // Background (Box color)
-    ctx.fillStyle = '#ec4899'; // pink-500
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Pattern (small dots for texture)
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-    for (let i = 0; i < canvas.width; i += 10) {
-      for (let j = 0; j < canvas.height; j += 10) {
-        ctx.beginPath();
-        ctx.arc(i, j, 1.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Horizontal Ribbon
-    ctx.fillStyle = '#be185d'; // pink-700
-    ctx.fillRect(0, canvas.height / 2 - 20, canvas.width, 40);
-    
-    // Vertical Ribbon
-    ctx.fillRect(canvas.width / 2 - 20, 0, 40, canvas.height);
-    
-    // Ribbon Borders
-    ctx.strokeStyle = '#9d174d'; // darker pink
-    ctx.lineWidth = 2;
-    ctx.strokeRect(canvas.width / 2 - 20, 0, 40, canvas.height);
-    ctx.strokeRect(0, canvas.height / 2 - 20, canvas.width, 40);
+    const x = 5;
+    const y = 5;
+    const w = canvas.width - 10;
+    const h = canvas.height - 10;
 
-    // Bow (Center)
+    // Create a beautiful, rich, fully-saturated pure red gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#ff1a40'); // vibrant rich red
+    grad.addColorStop(0.5, '#e60026'); // pure red
+    grad.addColorStop(1, '#b30019'); // deep rich ruby red
+    ctx.fillStyle = grad;
+
+    // Draw parametric heart path
+    const topCurveHeight = h * 0.3;
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2, canvas.height / 2);
-    ctx.quadraticCurveTo(canvas.width / 2 - 30, canvas.height / 2 - 40, canvas.width / 2 - 40, canvas.height / 2 - 10);
-    ctx.quadraticCurveTo(canvas.width / 2 - 30, canvas.height / 2 + 10, canvas.width / 2, canvas.height / 2);
-    ctx.fillStyle = '#f472b6';
+    ctx.moveTo(x + w / 2, y + topCurveHeight);
+    
+    // Top-left curve
+    ctx.bezierCurveTo(
+      x + w / 2, y,
+      x, y,
+      x, y + topCurveHeight
+    );
+    // Bottom-left curve
+    ctx.bezierCurveTo(
+      x, y + (h + topCurveHeight) / 2,
+      x + w / 2, y + h,
+      x + w / 2, y + h
+    );
+    // Bottom-right curve
+    ctx.bezierCurveTo(
+      x + w / 2, y + h,
+      x + w, y + (h + topCurveHeight) / 2,
+      x + w, y + topCurveHeight
+    );
+    // Top-right curve
+    ctx.bezierCurveTo(
+      x + w, y,
+      x + w / 2, y,
+      x + w / 2, y + topCurveHeight
+    );
+    ctx.closePath();
     ctx.fill();
+
+    // Red/Crimson Border (Fully red design)
+    ctx.strokeStyle = '#cc001b'; // rich crimson border
+    ctx.lineWidth = 2.5;
     ctx.stroke();
 
+    // Add a gentle glossy reflection shine to make the red heart pop
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
     ctx.beginPath();
-    ctx.moveTo(canvas.width / 2, canvas.height / 2);
-    ctx.quadraticCurveTo(canvas.width / 2 + 30, canvas.height / 2 - 40, canvas.width / 2 + 40, canvas.height / 2 - 10);
-    ctx.quadraticCurveTo(canvas.width / 2 + 30, canvas.height / 2 + 10, canvas.width / 2, canvas.height / 2);
-    ctx.fillStyle = '#f472b6';
+    ctx.ellipse(x + w * 0.3, y + h * 0.3, w * 0.12, h * 0.08, -Math.PI / 4, 0, Math.PI * 2);
     ctx.fill();
-    ctx.stroke();
-
-    // Center knot
-    ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, 8, 0, Math.PI * 2);
-    ctx.fillStyle = '#be185d';
-    ctx.fill();
-    ctx.stroke();
-    
-    // Add text overlay on the scratch cover
-    ctx.font = 'bold 16px "Inter", sans-serif';
-    ctx.fillStyle = '#fdf2f8'; // pink-50
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    
-    // Text shadow
-    ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
-    ctx.shadowBlur = 2;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
-    
-    ctx.fillText('Scratch to', canvas.width / 4, canvas.height / 4);
-    ctx.fillText('Reveal', canvas.width * 3 / 4, canvas.height * 3 / 4);
-    
-    ctx.shadowColor = 'transparent';
-
-    // Add decorative border
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
-
   }, [width, height]);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
     isDrawing.current = true;
+    setHasScratchStarted(true);
     const rect = canvasRef.current?.getBoundingClientRect();
     if (rect) {
       lastPoint.current = {
@@ -112,6 +97,8 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx || !lastPoint.current) return;
+
+    setHasScratchStarted(true);
 
     const rect = canvas.getBoundingClientRect();
     const currentPoint = {
@@ -148,18 +135,20 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
 
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
-    let transparentPixels = 0;
+    let opaquePixels = 0;
 
     for (let i = 3; i < pixels.length; i += 4) {
-      if (pixels[i] === 0) {
-        transparentPixels++;
+      if (pixels[i] > 10) {
+        opaquePixels++;
       }
     }
 
     const totalPixels = pixels.length / 4;
-    const transparentPercentage = (transparentPixels / totalPixels) * 100;
+    // Since the heart is drawn over a transparent background, the initial opaque pixels are about 50-60% of total pixels.
+    // If the remaining opaque pixels drop below 12% of total pixels, it means the heart has been mostly scratched off.
+    const opaquePercentage = (opaquePixels / totalPixels) * 100;
 
-    if (transparentPercentage > 50 && !isRevealed) {
+    if (opaquePercentage < 12 && !isRevealed) {
       setIsRevealed(true);
       onReveal();
       // Animate canvas fade out
@@ -173,7 +162,10 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
 
   return (
     <div className="relative inline-block" style={{ width, height }}>
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300"
+        style={{ opacity: (isRevealed || hasScratchStarted) ? 1 : 0 }}
+      >
         {content}
       </div>
       <canvas
