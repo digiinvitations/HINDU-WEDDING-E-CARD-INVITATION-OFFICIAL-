@@ -173,7 +173,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose, config,
       return;
     }
 
-    if (passcode === "4260980201") {
+    if (passcode === "9456") {
       setIsAuthenticated(true);
       setError("");
       setLoginAttempts(0);
