@@ -107,7 +107,7 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
     };
 
     ctx.globalCompositeOperation = 'destination-out';
-    ctx.lineWidth = 30;
+    ctx.lineWidth = 55;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
@@ -145,10 +145,10 @@ export function ScratchReveal({ content, onReveal, width = 300, height = 100 }: 
 
     const totalPixels = pixels.length / 4;
     // Since the heart is drawn over a transparent background, the initial opaque pixels are about 50-60% of total pixels.
-    // If the remaining opaque pixels drop below 12% of total pixels, it means the heart has been mostly scratched off.
+    // If the remaining opaque pixels drop below 25% of total pixels, it means the heart has been mostly scratched off.
     const opaquePercentage = (opaquePixels / totalPixels) * 100;
 
-    if (opaquePercentage < 12 && !isRevealed) {
+    if (opaquePercentage < 25 && !isRevealed) {
       setIsRevealed(true);
       onReveal();
       // Animate canvas fade out

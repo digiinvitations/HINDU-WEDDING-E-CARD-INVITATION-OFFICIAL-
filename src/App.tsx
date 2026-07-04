@@ -201,6 +201,27 @@ export default function App() {
     musicPlayingRef.current = musicPlaying;
   }, [musicPlaying]);
 
+  useEffect(() => {
+    if (allHeartsScratched) {
+      // Trigger confetti from left
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 0, y: 0.6 },
+        colors: ['#f43f5e', '#eab308', '#ec4899', '#ffffff']
+      });
+      // Trigger confetti from right
+      setTimeout(() => {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { x: 1, y: 0.6 },
+          colors: ['#f43f5e', '#eab308', '#ec4899', '#ffffff']
+        });
+      }, 200);
+    }
+  }, [allHeartsScratched]);
+
   // Lightbox / Gallery states
   const [activePhoto, setActivePhoto] = useState<string | null>(null);
 
@@ -609,16 +630,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={75}
-                  height={75}
+                  width={100}
+                  height={100}
                   onReveal={() => setIsDateRevealed(true)}
                   content={
-                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                    <div className={`w-[85px] h-[85px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
                       isDateRevealed 
                         ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
                         : "bg-transparent border-transparent"
                     }`}>
-                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                      <span className="font-sans text-base sm:text-lg font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
                         {dateOfMarry}
                       </span>
                     </div>
@@ -634,16 +655,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={75}
-                  height={75}
+                  width={100}
+                  height={100}
                   onReveal={() => setIsMonthRevealed(true)}
                   content={
-                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                    <div className={`w-[85px] h-[85px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
                       isMonthRevealed 
                         ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
                         : "bg-transparent border-transparent"
                     }`}>
-                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 uppercase tracking-widest leading-none drop-shadow-sm truncate max-w-[58px]">
+                      <span className="font-sans text-base sm:text-lg font-black text-pink-600 uppercase tracking-widest leading-none drop-shadow-sm truncate max-w-[75px]">
                         {monthOfMarry}
                       </span>
                     </div>
@@ -659,16 +680,16 @@ export default function App() {
               </span>
               <div className="p-1.5 bg-white/5 rounded-2xl border border-gold-500/15 shadow-xl inline-block">
                 <ScratchReveal
-                  width={75}
-                  height={75}
+                  width={100}
+                  height={100}
                   onReveal={() => setIsYearRevealed(true)}
                   content={
-                    <div className={`w-[62px] h-[62px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
+                    <div className={`w-[85px] h-[85px] rounded-full flex items-center justify-center p-1 overflow-hidden transition-all duration-500 ${
                       isYearRevealed 
                         ? "bg-rose-50 border border-pink-200/50 shadow-inner" 
                         : "bg-transparent border-transparent"
                     }`}>
-                      <span className="font-sans text-xs sm:text-sm font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
+                      <span className="font-sans text-base sm:text-lg font-black text-pink-600 tracking-wide leading-none drop-shadow-sm">
                         {yearOfMarry}
                       </span>
                     </div>
@@ -679,39 +700,12 @@ export default function App() {
           </div>
         </motion.section>
 
-        <SectionSeparator />
-
-        {/* 4. INVITATION MESSAGE SECTION */}
-        <motion.section 
-          id="message" 
-          initial={{ opacity: 0, y: 30 }} 
-          whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="py-16 px-4 md:px-8 max-w-4xl mx-auto text-center relative z-10"
-        >
-          <div className="flex justify-center mb-6">
-            <Heart size={28} className="text-gold-700 fill-gold-700/20 animate-pulse" />
-          </div>
-          
-          <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mb-2 uppercase font-bold">
-            {config.welcomeMessage.title}
-          </h2>
-          <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-800/80 mb-6 font-semibold">
-            {config.welcomeMessage.subtitle}
-          </p>
-          
-          <div className="w-16 h-[1px] bg-gold-600/40 mx-auto mb-8" />
-          
-          <p className="font-sans text-sm md:text-base leading-relaxed text-gray-900 max-w-2xl mx-auto font-medium">
-            {config.welcomeMessage.text}
-          </p>
-
-          <p className="font-accent text-4xl text-red-700 mt-10">
-            Save the Date to celebrate our happiness!
-          </p>
-        </motion.section>
-
+        {allHeartsScratched && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.5 }}
+          >
         <SectionSeparator />
 
         {/* 9. COUNTDOWN TIMER SECTION */}
@@ -782,6 +776,39 @@ export default function App() {
             </div>
           </div>
         </motion.section>
+        <SectionSeparator />
+
+        {/* 4. INVITATION MESSAGE SECTION */}
+        <motion.section 
+          id="message" 
+          initial={{ opacity: 0, y: 30 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="py-16 px-4 md:px-8 max-w-4xl mx-auto text-center relative z-10"
+        >
+          <div className="flex justify-center mb-6">
+            <Heart size={28} className="text-gold-700 fill-gold-700/20 animate-pulse" />
+          </div>
+          
+          <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mb-2 uppercase font-bold">
+            {config.welcomeMessage.title}
+          </h2>
+          <p className="font-sans text-xs uppercase tracking-[0.2em] text-gold-800/80 mb-6 font-semibold">
+            {config.welcomeMessage.subtitle}
+          </p>
+          
+          <div className="w-16 h-[1px] bg-gold-600/40 mx-auto mb-8" />
+          
+          <p className="font-sans text-sm md:text-base leading-relaxed text-gray-900 max-w-2xl mx-auto font-medium">
+            {config.welcomeMessage.text}
+          </p>
+
+          <p className="font-accent text-4xl text-red-700 mt-10">
+            Save the Date to celebrate our happiness!
+          </p>
+        </motion.section>
+
 
         <SectionSeparator />
 
@@ -1457,7 +1484,8 @@ export default function App() {
             </button>
           )}
         </footer>
-
+        </motion.div>
+      )}
       </div>
 
       {/* 13. FLOATING BUTTONS */}
