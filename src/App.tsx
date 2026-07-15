@@ -1138,7 +1138,7 @@ export default function App() {
           </div>
 
           {/* Vanish transition photo gallery */}
-          <div className="relative w-full h-[320px] sm:h-[420px] md:h-[520px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl border border-gold-500/20 group bg-neutral-950 flex items-center justify-center">
+          <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl border border-gold-500/20 group bg-neutral-950 flex items-center justify-center min-h-[300px] transition-all duration-500">
              {config.galleryImages.length > 0 && (
                 <AnimatePresence mode="wait">
                    <motion.div
@@ -1147,11 +1147,11 @@ export default function App() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.8, ease: "easeInOut" }}
-                      className="relative w-full h-full cursor-pointer flex flex-col items-center justify-center"
+                      className="relative w-full flex items-center justify-center cursor-pointer"
                       onClick={() => setActivePhoto(config.galleryImages[currentGalleryIndex].url)}
                    >
-                       <FirestoreImage src={config.galleryImages[currentGalleryIndex].url} alt={config.galleryImages[currentGalleryIndex].caption} className="w-full h-full object-cover" />
-                       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
+                       <FirestoreImage src={config.galleryImages[currentGalleryIndex].url} alt={config.galleryImages[currentGalleryIndex].caption} className="w-auto h-auto max-w-full max-h-[80vh] object-contain" />
+                       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90 pointer-events-none" />
                        <div className="absolute bottom-6 left-6 z-10 pointer-events-none">
                            <span className="font-display text-white text-xl md:text-2xl tracking-wider drop-shadow-md font-bold">
                              {config.galleryImages[currentGalleryIndex].caption}
