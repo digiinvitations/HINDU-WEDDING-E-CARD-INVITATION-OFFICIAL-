@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { GaneshaIcon } from "./GaneshaIcon";
 
 interface EnvelopeCoverProps {
   isOpen: boolean;
@@ -51,9 +50,7 @@ export const EnvelopeCover: React.FC<EnvelopeCoverProps> = ({
         <div className="relative z-10 flex flex-col items-center justify-start pt-12 md:pt-16">
           {envelopeIconUrl ? (
             <img src={envelopeIconUrl} alt="Icon" className="w-[72px] h-[72px] object-contain drop-shadow-md mb-3" />
-          ) : (
-            <GaneshaIcon size={72} className="text-pink-800 drop-shadow-sm mb-3" />
-          )}
+          ) : null}
           <h2 className="font-display text-xl md:text-2xl text-pink-800 tracking-widest font-bold drop-shadow-sm">
             ॥ श्री गणेशाय नमः ॥
           </h2>

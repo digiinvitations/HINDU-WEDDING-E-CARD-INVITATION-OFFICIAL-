@@ -21,11 +21,13 @@ import {
   Instagram,
   Facebook,
   Maximize2,
-  Flower2
+  Flower2,
+  Sparkles,
+  Star,
+  Sparkle
 } from "lucide-react";
 
 import { weddingConfig as defaultWeddingConfig, WeddingEvent, WeddingConfig } from "./weddingConfig";
-import { GaneshaIcon } from "./components/GaneshaIcon";
 import { OrnateFrame } from "./components/OrnateFrame";
 import { EnvelopeCover } from "./components/EnvelopeCover";
 import { RSVPModal } from "./components/RSVPModal";
@@ -572,9 +574,13 @@ export default function App() {
           {/* Couple Names Display (Bottom Aligned) */}
           <div className="relative z-10 w-full mb-4 flex flex-col items-center">
             {config.heroTagline && (
-              <p className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-md mb-1">
-                {config.heroTagline}
-              </p>
+              <div className="flex items-center gap-3 mb-1">
+                <Sparkle size={14} className="text-gold-300 opacity-80" />
+                <p className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] text-white drop-shadow-md">
+                  {config.heroTagline}
+                </p>
+                <Sparkle size={14} className="text-gold-300 opacity-80" />
+              </div>
             )}
             
             <h1 className="font-display text-5xl md:text-6xl text-gold-200 drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] leading-none select-none flex flex-col md:flex-row items-center gap-0 md:gap-3">
@@ -612,11 +618,15 @@ export default function App() {
         >
           {/* Beautiful "SAVE THE DATE ❤️" Tagline */}
           <div className="mb-8">
-            <span className="font-display text-2xl md:text-4xl text-red-600 tracking-[0.2em] font-extrabold drop-shadow-md flex items-center justify-center gap-2">
+            <span className="font-display text-2xl md:text-4xl text-red-600 tracking-[0.2em] font-extrabold drop-shadow-md flex items-center justify-center gap-3">
+              <Star size={20} className="text-gold-500 fill-gold-400" />
               SAVE THE DATE ❤️
+              <Star size={20} className="text-gold-500 fill-gold-400" />
             </span>
-            <p className="text-xs font-sans text-gold-700/80 uppercase tracking-[0.3em] font-semibold mt-1.5">
+            <p className="text-xs font-sans text-gold-700/80 uppercase tracking-[0.3em] font-semibold mt-1.5 flex justify-center items-center gap-2">
+              <Sparkles size={12} className="text-gold-500" />
               Scratch the hearts to reveal
+              <Sparkles size={12} className="text-gold-500" />
             </p>
             <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-gold-500 to-transparent mx-auto mt-3" />
           </div>
@@ -718,11 +728,11 @@ export default function App() {
           className="py-12 px-4 relative z-10"
         >
           <div className="max-w-2xl mx-auto bg-gradient-to-b from-royal-red-100 via-white to-royal-red-50 border border-gold-500/30 p-6 md:p-8 rounded-3xl shadow-xl text-center">
-            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold-700 font-bold">
-              The Sacred Auspicious Hours
+            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-gold-700 font-bold flex justify-center items-center gap-2"><Star size={10} className="text-gold-500 fill-gold-400" />
+              The Sacred Auspicious Hours <Star size={10} className="text-gold-500 fill-gold-400" />
             </span>
-            <h3 className="font-display text-xl text-red-700 tracking-wider mt-1 mb-6 uppercase font-bold">
-              Counting down to Phere
+            <h3 className="font-display text-xl text-red-700 tracking-wider mt-1 mb-6 uppercase font-bold flex justify-center items-center gap-2"><Sparkles size={20} className="text-gold-500" />
+              Counting down to Phere <Sparkles size={20} className="text-gold-500" />
             </h3>
 
             {/* Countdown grid */}
@@ -822,11 +832,15 @@ export default function App() {
           className="py-16 px-4 md:px-8 max-w-5xl mx-auto relative z-10"
         >
           <div className="text-center mb-12">
-            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold flex justify-center items-center gap-2">
+              <Flower2 size={10} className="text-gold-500" />
               Introducing
+              <Flower2 size={10} className="text-gold-500" />
             </span>
-            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold">
+            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold flex justify-center items-center gap-3">
+              <Sparkles size={24} className="text-gold-500" />
               The Bride & The Groom
+              <Sparkles size={24} className="text-gold-500" />
             </h2>
             <div className="w-12 h-0.5 bg-gold-600/40 mx-auto mt-3" />
           </div>
@@ -980,11 +994,15 @@ export default function App() {
           className="py-16 px-4 md:px-8 max-w-5xl mx-auto relative z-10"
         >
           <div className="text-center mb-16">
-            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold flex justify-center items-center gap-2">
+              <Flower2 size={10} className="text-gold-500" />
               The Celebration Schedule
+              <Flower2 size={10} className="text-gold-500" />
             </span>
-            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold">
+            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold flex justify-center items-center gap-3">
+              <Sparkles size={24} className="text-gold-500" />
               Wedding Ceremonies
+              <Sparkles size={24} className="text-gold-500" />
             </h2>
             <div className="w-12 h-0.5 bg-gold-600/40 mx-auto mt-3" />
           </div>
@@ -1125,11 +1143,15 @@ export default function App() {
           className="py-16 px-4 md:px-8 max-w-5xl mx-auto relative z-10"
         >
           <div className="text-center mb-16">
-            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-gold-700 font-bold flex justify-center items-center gap-2">
+              <Flower2 size={10} className="text-gold-500" />
               Moments of Love
+              <Flower2 size={10} className="text-gold-500" />
             </span>
-            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold">
+            <h2 className="font-display text-3xl md:text-4xl text-red-700 tracking-wide mt-1 uppercase font-bold flex justify-center items-center gap-3">
+              <Sparkles size={24} className="text-gold-500" />
               Photo Gallery
+              <Sparkles size={24} className="text-gold-500" />
             </h2>
             <div className="w-12 h-0.5 bg-gold-600/40 mx-auto mt-3" />
             {config.gallerySubtitle && (
@@ -1231,11 +1253,15 @@ export default function App() {
             <form onSubmit={handleRSVPSubmit} className="space-y-6 p-2 text-center">
               <div>
                 <Heart size={24} className="text-gold-600 fill-gold-600 mx-auto animate-pulse mb-3" />
-                <h2 className="font-display text-2xl md:text-3xl text-red-700 uppercase font-bold">
+                <h2 className="font-display text-2xl md:text-3xl text-red-700 uppercase font-bold flex justify-center items-center gap-3">
+                  <Sparkles size={20} className="text-gold-500" />
                   Kindly RSVP
+                  <Sparkles size={20} className="text-gold-500" />
                 </h2>
-                <p className="font-sans text-[10px] text-gray-600 uppercase tracking-[0.2em] mt-1 font-semibold">
+                <p className="font-sans text-[10px] text-gray-600 uppercase tracking-[0.2em] mt-1 font-semibold flex justify-center items-center gap-2">
+                  <Flower2 size={10} className="text-gold-500" />
                   Please respond by December 1, 2026
+                  <Flower2 size={10} className="text-gold-500" />
                 </p>
                 <div className="w-12 h-[1px] bg-gold-600/40 mx-auto mt-4" />
               </div>
@@ -1407,15 +1433,17 @@ export default function App() {
           <div className="max-w-2xl mx-auto flex flex-col items-center">
             {config.envelopeIconUrl ? (
               <img src={config.envelopeIconUrl} alt="Icon" className="w-[60px] h-[60px] object-contain opacity-80 mb-4" />
-            ) : (
-              <GaneshaIcon size={60} className="opacity-80 mb-4" />
-            )}
+            ) : null}
             
-            <p className="font-accent text-5xl md:text-6xl text-red-700 mb-2">
+            <p className="font-accent text-5xl md:text-6xl text-red-700 mb-2 flex justify-center items-center gap-3">
+              <Sparkles size={24} className="text-gold-500" />
               Dhanyawaad
+              <Sparkles size={24} className="text-gold-500" />
             </p>
-            <p className="font-sans text-xs uppercase tracking-[0.25em] text-gold-700 mb-6 font-bold">
+            <p className="font-sans text-xs uppercase tracking-[0.25em] text-gold-700 mb-6 font-bold flex justify-center items-center gap-2">
+              <Flower2 size={10} className="text-gold-500" />
               Thank You
+              <Flower2 size={10} className="text-gold-500" />
             </p>
 
             {/* Final Couple Portrait Frame */}
