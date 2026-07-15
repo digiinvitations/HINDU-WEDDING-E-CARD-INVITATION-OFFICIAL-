@@ -35,6 +35,7 @@ import { AdminPanel } from "./components/AdminPanel";
 import { ScratchReveal } from "./components/ScratchReveal";
 import { FallingFlowers } from "./components/FallingFlowers";
 import { SectionSeparator } from "./components/SectionSeparator";
+import { EventMap } from "./components/EventMap";
 import confetti from "canvas-confetti";
 
 import { db } from "./lib/firebase";
@@ -1069,18 +1070,12 @@ export default function App() {
                       </div>
                     </div>
 
-                    {/* Google Maps Preview Embed */}
+                    {/* Interactive Map Preview */}
                     {config.events[currentEventIndex].mapEmbedUrl && (
-                      <div className="w-full h-32 rounded-xl overflow-hidden border border-gold-500/20 shadow-inner bg-gray-100">
-                        <iframe
-                          src={config.events[currentEventIndex].mapEmbedUrl}
-                          width="100%"
-                          height="100%"
-                          style={{ border: 0 }}
-                          allowFullScreen={false}
-                          loading="lazy"
-                          referrerPolicy="no-referrer"
-                          title={`${config.events[currentEventIndex].name} Map`}
+                      <div className="w-full mt-4 z-10 relative">
+                        <EventMap 
+                          mapEmbedUrl={config.events[currentEventIndex].mapEmbedUrl} 
+                          venueName={config.events[currentEventIndex].venueName} 
                         />
                       </div>
                     )}
