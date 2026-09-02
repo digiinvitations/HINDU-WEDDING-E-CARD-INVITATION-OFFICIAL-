@@ -35,6 +35,7 @@ import { AdminPanel } from "./components/AdminPanel";
 import { ScratchReveal } from "./components/ScratchReveal";
 import { FallingFlowers } from "./components/FallingFlowers";
 import { SectionSeparator } from "./components/SectionSeparator";
+import { Preloader } from "./components/Preloader";
 import { EventMap } from "./components/EventMap";
 import confetti from "canvas-confetti";
 
@@ -123,7 +124,8 @@ export default function App() {
         )
         .subscribe();
 
-      return () => {
+
+  return () => {
         supabase.removeChannel(channel);
       };
     } else {
@@ -142,7 +144,8 @@ export default function App() {
       }, (err) => {
         console.warn("Firestore config listener error (likely missing rules):", err);
       });
-      return () => unsub();
+
+  return () => unsub();
     }
   }, []);
 
@@ -260,7 +263,8 @@ export default function App() {
     const interval = setInterval(() => {
       nextEvent();
     }, 6000);
-    return () => clearInterval(interval);
+
+  return () => clearInterval(interval);
   }, [isOpened, config.events.length]);
 
   // Auto-advance Gallery Slider
@@ -269,7 +273,8 @@ export default function App() {
     const interval = setInterval(() => {
       nextGallery();
     }, 4500);
-    return () => clearInterval(interval);
+
+  return () => clearInterval(interval);
   }, [isOpened, config.galleryImages.length]);
 
   // RSVP Form states
@@ -319,7 +324,8 @@ export default function App() {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(interval);
+
+  return () => clearInterval(interval);
   }, []);
 
   // Handle Audio Player
@@ -396,7 +402,8 @@ export default function App() {
 
     loadAudio();
 
-    return () => {
+
+  return () => {
       isCancelled = true;
       // Clean up only when unmounting the whole component
     };
@@ -416,7 +423,8 @@ export default function App() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+  return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
 
@@ -518,9 +526,27 @@ export default function App() {
     setRsvpMessage("");
   };
 
+
+  const [isPreloaded, setIsPreloaded] = useState(false);
+
   return (
     <div className="min-h-screen bg-royal-red-950 font-sans relative text-amber-50">
       
+      {!isPreloaded && (
+        <Preloader
+          images={[
+            config.heroImageUrl,
+            config.groom?.imageUrl,
+            config.bride?.imageUrl,
+            config.envelopeIconUrl,
+            config.thankYouImageUrl,
+            ...(config.galleryImages?.map(i => i.url) || []),
+            ...(config.events?.map(e => e.imageUrl) || [])
+          ].filter(Boolean) as string[]}
+          onComplete={() => setIsPreloaded(true)}
+        />
+      )}
+
       {/* 1. OVERLAY ENVELOPE COVER (Opening Screen) */}
       <AnimatePresence>
         {!isOpened && (
