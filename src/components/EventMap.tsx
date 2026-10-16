@@ -14,6 +14,7 @@ L.Icon.Default.mergeOptions({
 interface EventMapProps {
   mapEmbedUrl: string;
   venueName: string;
+  onDirectionsClick?: () => void;
 }
 
 const customIcon = new L.Icon({
@@ -33,7 +34,7 @@ function MapUpdater({ lat, lng }: { lat: number, lng: number }) {
   return null;
 }
 
-export const EventMap: React.FC<EventMapProps> = ({ mapEmbedUrl, venueName }) => {
+export const EventMap: React.FC<EventMapProps> = ({ mapEmbedUrl, venueName, onDirectionsClick }) => {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
@@ -64,10 +65,10 @@ export const EventMap: React.FC<EventMapProps> = ({ mapEmbedUrl, venueName }) =>
             <div className="text-center font-sans">
               <strong className="text-red-700">{venueName}</strong>
               <div className="flex gap-2 mt-2 justify-center">
-                <a href={uberUrl} target="_blank" rel="noreferrer" className="text-xs bg-black text-white px-2 py-1 rounded hover:bg-gray-800 flex items-center gap-1">
+                <a href={uberUrl} target="_blank" rel="noreferrer" onClick={onDirectionsClick} className="text-xs bg-black text-white px-2 py-1 rounded hover:bg-gray-800 flex items-center gap-1">
                   Uber
                 </a>
-                <a href={olaUrl} target="_blank" rel="noreferrer" className="text-xs bg-yellow-400 text-black px-2 py-1 rounded hover:bg-yellow-500 flex items-center gap-1">
+                <a href={olaUrl} target="_blank" rel="noreferrer" onClick={onDirectionsClick} className="text-xs bg-yellow-400 text-black px-2 py-1 rounded hover:bg-yellow-500 flex items-center gap-1">
                   Ola
                 </a>
               </div>
@@ -77,10 +78,10 @@ export const EventMap: React.FC<EventMapProps> = ({ mapEmbedUrl, venueName }) =>
         <MapUpdater lat={coords.lat} lng={coords.lng} />
       </MapContainer>
       <div className="absolute top-2 right-2 z-[400] flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-        <a href={uberUrl} target="_blank" rel="noreferrer" className="bg-black text-white text-[10px] font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
+        <a href={uberUrl} target="_blank" rel="noreferrer" onClick={onDirectionsClick} className="bg-black text-white text-[10px] font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
           Get Uber
         </a>
-        <a href={olaUrl} target="_blank" rel="noreferrer" className="bg-yellow-400 text-black text-[10px] font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
+        <a href={olaUrl} target="_blank" rel="noreferrer" onClick={onDirectionsClick} className="bg-yellow-400 text-black text-[10px] font-bold px-3 py-1.5 rounded shadow-lg flex items-center gap-1">
           Get Ola
         </a>
       </div>

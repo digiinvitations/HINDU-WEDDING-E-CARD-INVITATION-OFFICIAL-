@@ -24,7 +24,8 @@ import {
   Flower2,
   Sparkles,
   Star,
-  Sparkle
+  Sparkle,
+  Pencil
 } from "lucide-react";
 
 import { weddingConfig as defaultWeddingConfig, WeddingEvent, WeddingConfig } from "./weddingConfig";
@@ -37,6 +38,7 @@ import { FallingFlowers } from "./components/FallingFlowers";
 import { SectionSeparator } from "./components/SectionSeparator";
 import { Preloader } from "./components/Preloader";
 import { EventMap } from "./components/EventMap";
+import { EditInvitationModal } from "./components/EditInvitationModal";
 import confetti from "canvas-confetti";
 
 import { db } from "./lib/firebase";
@@ -172,6 +174,7 @@ export default function App() {
   const [isMonthRevealed, setIsMonthRevealed] = useState(false);
   const [isYearRevealed, setIsYearRevealed] = useState(false);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const allHeartsScratched = isDateRevealed && isMonthRevealed && isYearRevealed;
   const musicPlayingRef = useRef(musicPlaying);
@@ -454,6 +457,36 @@ export default function App() {
         });
     }
   };
+
+  // Pause Background Music Helper
+  const pauseMusic = () => {
+    if (audioRef.current && !audioRef.current.paused) {
+      audioRef.current.pause();
+      setMusicPlaying(false);
+    }
+  };
+
+  // Automatically pause music when user switches tabs, leaves or minimizes the website
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.hidden) {
+        pauseMusic();
+      }
+    };
+    const handleExit = () => {
+      pauseMusic();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("pagehide", handleExit);
+    window.addEventListener("blur", handleExit);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("pagehide", handleExit);
+      window.removeEventListener("blur", handleExit);
+    };
+  }, []);
 
   // Toggle Background Music
   const toggleMusic = (e?: React.MouseEvent) => {
@@ -1102,6 +1135,7 @@ export default function App() {
                         <EventMap 
                           mapEmbedUrl={config.events[currentEventIndex].mapEmbedUrl} 
                           venueName={config.events[currentEventIndex].venueName} 
+                          onDirectionsClick={pauseMusic}
                         />
                       </div>
                     )}
@@ -1111,6 +1145,7 @@ export default function App() {
                       href={config.events[currentEventIndex].mapDirectionsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={pauseMusic}
                       className="w-full bg-gradient-to-r from-gold-600 to-gold-400 hover:from-gold-500 hover:to-gold-300 text-royal-red-950 font-bold uppercase text-xs tracking-wider py-3 px-6 rounded-xl text-center shadow-lg hover:shadow-[0_0_15px_rgba(222,196,127,0.4)] transition-all duration-300 flex items-center justify-center space-x-2"
                     >
                       <MapPin size={15} />
@@ -1600,6 +1635,33 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      {/* Floating "Edit Your Invitation" Button (Only visible inside website after opening invitation) */}
+      <AnimatePresence>
+        {isOpened && (
+          <motion.div
+            key="floating-edit-invitation"
+            initial={{ scale: 0, opacity: 0, y: 15 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0, opacity: 0, y: 15 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            className="fixed bottom-22 right-5 md:bottom-24 md:right-6 z-40"
+          >
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="bg-gradient-to-r from-royal-red-950 via-royal-red-900 to-royal-red-950 hover:from-royal-red-900 hover:to-royal-red-800 text-gold-200 hover:text-white border border-gold-400/60 hover:border-gold-300 shadow-[0_4px_18px_rgba(0,0,0,0.45)] px-3 py-1.5 md:px-3.5 md:py-2 rounded-full flex items-center gap-1.5 md:gap-2 cursor-pointer backdrop-blur-md transition-all duration-300 group active:scale-95 hover:scale-105"
+              title="Edit Your Invitation Details"
+            >
+              <div className="w-5 h-5 rounded-full bg-gold-500/20 border border-gold-400/50 flex items-center justify-center text-gold-300 group-hover:text-gold-100 group-hover:bg-gold-500/30 transition-all shrink-0">
+                <Pencil size={11} className="stroke-[2.5]" />
+              </div>
+              <span className="font-sans font-semibold text-[11px] md:text-xs uppercase tracking-wider text-gold-200 group-hover:text-amber-100 whitespace-nowrap drop-shadow-sm">
+                Edit Your Invitation
+              </span>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* RSVP Confirmation Modal */}
       <RSVPModal
         isOpen={showRsvpModal}
@@ -1608,6 +1670,13 @@ export default function App() {
         isAttending={rsvpAttend === true}
         guestsCount={rsvpGuests}
         weddingDate={config.weddingDate}
+      />
+
+      {/* Edit Invitation Form Modal */}
+      <EditInvitationModal
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        config={config}
       />
 
       {/* Admin Dashboard Drawer/Modal */}
